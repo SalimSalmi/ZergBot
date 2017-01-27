@@ -28,4 +28,12 @@ module ZergHatcheryEvent {
 	
 	% If there is a Spawning Pool start making zerglings
 	if not(goal(unitAmount("Zerg Zergling", 20))), bel(friendly("Zerg Spawning Pool", _, _, _), unitAmount("Zerg Drone", N), N >= 6) then adopt(unitAmount("Zerg Zergling", 20)).	
+
+	% bel(unitAmount("Zerg Overlord", X), X > 2)),unitAmount("Zerg Overlord", Y),not(Y>0), distance(X1,Y1,X2,Y2,D), D < 10)%
+	
+	if  percept(vespeneGeyser(_,_,_,X1,Y1)), percept(status(_,_,_,_,X2,Y2)), bel(unitAmount("Zerg Overlord", X), X > 2,unitAmount("Zerg Overlord", Y),not(Y>0),distance(X1,Y1,X2,Y2,D), D < 10) then (overMind).send:(sendDrone("Zerg Extractor",X1,Y1)).
+	
+	
+	
+	
 }

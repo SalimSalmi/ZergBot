@@ -1,8 +1,10 @@
 use ZergHatchery as knowledge.
 use Zerghatchery as actionspec.
 
-module ZergHatchery {	
+module ZergHatchery {
 	
+		
+	%%%if supply is low then build overlords
 	if bel(not(isMorphing("Zerg Overlord",_)), supply(CS, TS), (TS - CS) < 2, unitCost("Zerg Overlord", Cost), minerals(M), M >= Cost) then train("Zerg Overlord").
 			
 	% If there is a goal to make a certain amount of units and there are not at least that amount of units
@@ -13,6 +15,9 @@ module ZergHatchery {
 	% If there are no units yet but there is a goal to make it and there are enough resources then train the unit.
 	if a-goal(unitAmount(Unit, G)), bel(aggregate_all(count, isMorphing("Zerg Egg",_), CMorph),
 	G>CMorph, not(unitAmount(Unit, _)), unitCost(Unit, Cost), minerals(M), M >= Cost) then train(Unit).
+	
+	
+	%%%building the extractor
 	
 
 }

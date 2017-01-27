@@ -45,4 +45,9 @@ module ZergDroneEvent {
 	
 	% If the worker is not busy yet, start gathering minerals
 	if bel(not(busy), self(Id, _)) then adopt(workerActivity(Id, gatheringMinerals)).
+	
+	%%%message from overmind for building
+	
+	if (_).sent:(sendDrone(Building,X1,Y1)) then insert(sendDrone(Building,X1,Y1)).
+	
 }
