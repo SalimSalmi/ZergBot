@@ -8,7 +8,8 @@ unitAmount/2,
 gas/1,
 supply/2,
 train/1,
-sendDrone/3.
+sendDrone/1,
+chat/0.
 
 % default distance check				
 	distance(X1,Y1,X2,Y2,D) :- D is sqrt((X2-X1)**2 + (Y2-Y1)**2).

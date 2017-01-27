@@ -31,9 +31,13 @@ module ZergHatcheryEvent {
 
 	% bel(unitAmount("Zerg Overlord", X), X > 2)),unitAmount("Zerg Overlord", Y),not(Y>0), distance(X1,Y1,X2,Y2,D), D < 10)%
 	
-	if  percept(vespeneGeyser(_,_,_,X1,Y1)), percept(status(_,_,_,_,X2,Y2)), bel(unitAmount("Zerg Overlord", X), X > 2,unitAmount("Zerg Overlord", Y),not(Y>0),distance(X1,Y1,X2,Y2,D), D < 10) then (overMind).send:(sendDrone("Zerg Extractor",X1,Y1)).
+	%if  percept(vespeneGeyser(_,_,_,X1,Y1)), percept(status(_,_,_,_,X2,Y2)), bel(unitAmount("Zerg Overlord", X), X > 2,unitAmount("Zerg Overlord", Y),not(Y>0),distance(X1,Y1,X2,Y2,D), D < 10) then (allother).send:(sendDrone("Zerg Extractor",X1,Y1)).
+	
+	%if true then (drone).send:(chat).
+	
+	%if percept(vespeneGeyser(_,_,_,X1,Y1)) then (allother).send:(sendDrone("Zerg Extractor",X1,Y1)).
 	
 	
-	
+	if bel(unitAmount("Zerg Overlord", X), X > 2,unitAmount("Zerg Extractor", Y),not(Y>0)) then (allother).send:(unitAmount("Zerg Extractor",1)).
 	
 }

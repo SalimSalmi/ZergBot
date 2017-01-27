@@ -48,6 +48,13 @@ module ZergDroneEvent {
 	
 	%%%message from overmind for building
 	
-	if (_).sent:(sendDrone(Building,X1,Y1)) then insert(sendDrone(Building,X1,Y1)).
+	%if (_).sent:(sendDrone(Building,X1,Y1)) then insert(sendDrone(Building,X1,Y1)).
+	
+	%if (_).sent:(chat) then insert(chat).
+	
+	forall (_).sent:(unitAmount(Building,N)) do adopt(unitAmount(Building,N)).
+	
+	if a-goal(unitAmount("Zerg Extractor", E)), percept(vespeneGeyser(_,_,_,X1,Y1)), bel(hatcheryPosition(Xh, Yh), distance(X1,Y1,Xh,Yh,D), D<10,
+	 (unitAmount("Zerg Extractor",ECurrent), E > ECurrent ; not(unitAmount("Zerg Extractor", _)))) then adopt(morph("Zerg Extractor", X1, Y1)).
 	
 }

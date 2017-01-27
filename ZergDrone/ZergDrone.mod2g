@@ -12,5 +12,7 @@ module ZergDrone {
 	
 	%%Building stuff
 	
-	if bel(sendDrone(Building,X1,Y1)) then build("Zerg Hatchery",X1,Y1).
+	%if bel(sendDrone(Building,X1,Y1)) then build("Zerg Hatchery",X1,Y1).
+	
+	if goal(morph(Building,X1,Y1)), bel(cost(Building,Mins,_), minerals(M), M >= Mins) then drop(morph(Building,X1,Y1))+build(Building,X1,Y1). 
 }

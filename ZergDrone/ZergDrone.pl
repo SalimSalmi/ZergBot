@@ -13,7 +13,9 @@ base/4,
 friendly/6,
 unitAmount/2,
 hatcheryPosition/2,
-sendDrone/3.
+sendDrone/1,
+chat/0,
+morph/3.
 
 	% Indicates when agent is busy gathering
 	busy :- condition(List), member(gathering, List).
@@ -22,6 +24,7 @@ sendDrone/3.
 	cost("Zerg Spawning Pool", 200, 0).
 	cost("Zerg Hatchery", 300, 0).
 	cost("Zerg Creep Colony", 75, 0).
+	cost("Zerg Extractor",50,0).
 	
 	
 	% default distance check				

@@ -28,7 +28,7 @@ module OverMindEvent {
 	% If hatchery position is requested, send the nexus location
 	forall (Name).sent?(hatcheryPosition), bel(hatcheryPosition(X, Y)) do (Name).send:(hatcheryPosition(X, Y)).
 	
-	if (_).sent:(sendDrone(Building,X1,Y1)) then insert(sendDrone(Building,X1,Y1)).
+	%if (_).sent:(sendDrone(Building,X1,Y1)) then insert(sendDrone(Building,X1,Y1)).
 	
-	forall bel(sendDrone(Building,X1,Y1), drone(Name,Id)) do (Name).send(sendDrone(Building,X1,Y1)).
+	%forall bel(sendDrone(Building,X1,Y1), drone(Name,Id)) do (Name).send(sendDrone(Building,X1,Y1)).
 }
