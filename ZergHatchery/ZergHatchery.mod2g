@@ -5,7 +5,7 @@ module ZergHatchery {
 	
 		
 	%%%if supply is low then build overlords
-	if bel(not(isMorphing("Zerg Overlord",_)), supply(CS, TS), (TS - CS) < 2, unitCost("Zerg Overlord", Cost), minerals(M), M >= Cost) then train("Zerg Overlord").
+	if bel(not(isMorphing("Zerg Egg",_)), supply(CS, TS), (TS - CS) < 2, unitCost("Zerg Overlord", Cost), minerals(M), M >= Cost) then train("Zerg Overlord").
 			
 	% If there is a goal to make a certain amount of units and there are not at least that amount of units
 	% and there are enough resources then train the unit.

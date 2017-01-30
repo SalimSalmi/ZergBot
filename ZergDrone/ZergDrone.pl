@@ -15,7 +15,10 @@ unitAmount/2,
 hatcheryPosition/2,
 sendDrone/1,
 chat/0,
-morph/3.
+morph/3,
+myPos/2,
+otherPos/3,
+isMorphing/2.
 
 	% Indicates when agent is busy gathering
 	busy :- condition(List), member(gathering, List).
@@ -29,6 +32,11 @@ morph/3.
 	
 	% default distance check				
 	distance(X1,Y1,X2,Y2,D) :- D is sqrt((X2-X1)**2 + (Y2-Y1)**2).
+	
+	closestOther(X1,Y1, D) :- otherPos(_,X2,Y2), distance(X1,Y1, X2, Y2,D2), D > D2.
+	
+	closestBuildLoc(X, Y) :- hatcheryPosition(Xh, Yh), constructionSite(X, Y), distance(X, Y, Xh, Yh, D),
+				constructionSite(X2, Y2), not(X==X2), not(Y==Y2), distance(X, Y, Xh, Yh, D2), not(D > D2).
 				
 	% example code for gas gathering handling
 	shouldMineVespene :- unitAmount("Zerg Extractor",RefCount),

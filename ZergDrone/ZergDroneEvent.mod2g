@@ -13,6 +13,13 @@ module ZergDroneEvent {
 	% If hatchery position is told, insert it in knowledge base
 	if (_).sent:(hatcheryPosition(X, Y)) then insert(hatcheryPosition(X, Y)).
 	
+	% Drone positions
+	if bel(myPos(X,Y)) then allother.send(myPos(X,Y)).
+	forall (Name).sent(myPos(X,Y)), not(bel(otherPos(Name, X, Y))) do insert(otherPos(Name, X, Y)).
+	forall (Name).sent(myPos(X,Y)), bel(otherPos(Name, X2, Y2), not(X==X2), not(Y==Y2)) do delete(otherPos(Name, X2, Y2)).
+	
+	if (_).sent(morph(Building, _, _)), a-goal(morph(Building, X, Y)) then drop(morph(Building, X, Y)).
+	
 	%%%%%%%%%%%%%%% --------------------------------------- Percepts --------------------------------------- %%%%%%%%%%%%%%%
 	
 	% The generic percepts most units use
@@ -40,21 +47,21 @@ module ZergDroneEvent {
 	%%%%%%%%%%%%%%% --------------------------------------- GOALS --------------------------------------- %%%%%%%%%%%%%%%
 	
 	% If there is no spawningpool yet, create one
-	if not(goal(unitAmount("Zerg Spawning Pool", 1))), bel(builder, not(friendly("Zerg Spawning Pool", _, _, _,_,_))) 
-	then adopt(unitAmount("Zerg Spawning Pool", 1)).
+	if not(goal(unitAmount("Zerg Spawning Pool", 1))) then adopt(unitAmount("Zerg Spawning Pool", 1)).
 	
 	% If the worker is not busy yet, start gathering minerals
 	if bel(not(busy), self(Id, _)) then adopt(workerActivity(Id, gatheringMinerals)).
 	
-	%%%message from overmind for building
-	
-	%if (_).sent:(sendDrone(Building,X1,Y1)) then insert(sendDrone(Building,X1,Y1)).
-	
-	%if (_).sent:(chat) then insert(chat).
-	
 	forall (_).sent:(unitAmount(Building,N)) do adopt(unitAmount(Building,N)).
 	
+	if a-goal(unitAmount("Zerg Spawning Pool", E)), bel(closestBuildLoc(X1, Y1),
+	 (unitAmount("Zerg Spawning Pool",ECurrent), E > ECurrent ; not(unitAmount("Zerg Spawning Pool", _))), myPos(X2,Y2),
+	 distance(X1,Y1,X2,Y2,D2), not(closestOther(X1,Y1, D2)))
+	 then adopt(morph("Zerg Spawning Pool", X1, Y1)) + allother.send:(morph("Zerg Spawning Pool", X1, Y1)).
+	
 	if a-goal(unitAmount("Zerg Extractor", E)), percept(vespeneGeyser(_,_,_,X1,Y1)), bel(hatcheryPosition(Xh, Yh), distance(X1,Y1,Xh,Yh,D), D<10,
-	 (unitAmount("Zerg Extractor",ECurrent), E > ECurrent ; not(unitAmount("Zerg Extractor", _)))) then adopt(morph("Zerg Extractor", X1, Y1)).
+	 (unitAmount("Zerg Extractor",ECurrent), E > ECurrent ; not(unitAmount("Zerg Extractor", _))), myPos(X2,Y2),
+	 distance(X1,Y1,X2,Y2,D2), not(closestOther(X1,Y1, D2)))
+	 then adopt(morph("Zerg Extractor", X1, Y1)) + allother.send:(morph("Zerg Extractor", X1, Y1)).
 	
 }

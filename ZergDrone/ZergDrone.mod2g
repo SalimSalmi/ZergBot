@@ -3,6 +3,9 @@ use ZergDrone as actionspec.
 use "../GenericMods/GenericPercepts" as module.
 
 module ZergDrone {
+	
+	if goal(morph(Building,X1,Y1)), bel(cost(Building,Mins,_), minerals(M), M >= Mins) then build(Building,X1,Y1). 
+	
 	% If goal to have 1 Spawning Pool and have enough minerals, build a Spawning Pool
 	if a-goal(unitAmount("Zerg Spawning Pool", 1)), bel(constructionSite(X,Y), minerals(M), M >= 200) then build("Zerg Spawning Pool", X, Y).
 	
@@ -14,5 +17,4 @@ module ZergDrone {
 	
 	%if bel(sendDrone(Building,X1,Y1)) then build("Zerg Hatchery",X1,Y1).
 	
-	if goal(morph(Building,X1,Y1)), bel(cost(Building,Mins,_), minerals(M), M >= Mins) then drop(morph(Building,X1,Y1))+build(Building,X1,Y1). 
 }

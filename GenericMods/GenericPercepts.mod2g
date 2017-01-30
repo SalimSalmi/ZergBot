@@ -23,4 +23,9 @@ module GenericPercepts {
 	% The handling of the unitAmount percept
 	forall percept(unitAmount(Type,Count)), not(bel(unitAmount(Type,Count))) do insert(unitAmount(Type,Count)).
 	forall bel(unitAmount(Type,Count)),not(percept(unitAmount(Type,Count))) do delete(unitAmount(Type,Count)).
+	
+	% The handling of the status percept
+	if percept(status(_,_,_,_,X,Y)), not(bel(myPos(X,Y))) then insert(myPos(X,Y)).
+	if bel(myPos(X,Y)), not(percept(status(_,_,_,_,X,Y))) then delete(myPos(X,Y)).
+	
 }
