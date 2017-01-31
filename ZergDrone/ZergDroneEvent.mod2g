@@ -54,10 +54,12 @@ module ZergDroneEvent {
 	
 	forall (_).sent:(unitAmount(Building,N)) do adopt(unitAmount(Building,N)).
 	
+	
+	
 	if a-goal(unitAmount("Zerg Spawning Pool", E)), bel(closestBuildLoc(X1, Y1),
 	 (unitAmount("Zerg Spawning Pool",ECurrent), E > ECurrent ; not(unitAmount("Zerg Spawning Pool", _))), myPos(X2,Y2),
 	 distance(X1,Y1,X2,Y2,D2), not(closestOther(X1,Y1, D2)))
-	 then adopt(morph("Zerg Spawning Pool", X1, Y1)) + allother.send:(morph("Zerg Spawning Pool", X1, Y1)).
+	 then allother.send:(morph("Zerg Spawning Pool", X1, Y1)) + adopt(morph("Zerg Spawning Pool", X1, Y1)).
 	
 	if a-goal(unitAmount("Zerg Extractor", E)), percept(vespeneGeyser(_,_,_,X1,Y1)), bel(hatcheryPosition(Xh, Yh), distance(X1,Y1,Xh,Yh,D), D<10,
 	 (unitAmount("Zerg Extractor",ECurrent), E > ECurrent ; not(unitAmount("Zerg Extractor", _))), myPos(X2,Y2),
