@@ -25,6 +25,14 @@ define zergZergling as agent{
 	use ZergZergling.ZergZerglingEvent as event module.
 }
 
+define zergExtractor as agent{
+	use ZergExtractor.ZergExtractor as main module.
+	use ZergExtractor.ZergExtractorEvent as event module.
+	
+}
+
+
+
 define overMind as agent {
 	use OverMind.OverMind as main module.	
 }
@@ -34,4 +42,5 @@ launchpolicy{
 	when type = zergHatchery launch zergHatchery.
 	when type = zergZergling launch zergZergling.
 	when type = zergDrone launch zergDrone.
+	when type = zergExtractor launch zergExtractor.
 	}

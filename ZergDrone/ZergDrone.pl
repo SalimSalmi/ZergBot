@@ -18,7 +18,8 @@ chat/0,
 morph/3,
 myPos/2,
 otherPos/3,
-isMorphing/2.
+isMorphing/2,
+extractor/3.
 
 	% Indicates when agent is busy gathering
 	busy :- condition(List), member(gathering, List).
@@ -28,6 +29,7 @@ isMorphing/2.
 	cost("Zerg Hatchery", 300, 0).
 	cost("Zerg Creep Colony", 75, 0).
 	cost("Zerg Extractor",50,0).
+	cost("Zerg Hydralisk Den",100,100).
 	
 	
 	% default distance check				

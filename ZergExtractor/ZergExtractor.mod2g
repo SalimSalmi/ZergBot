@@ -1,0 +1,7 @@
+use ZergExtractor as knowledge.
+use "../GenericMods/GenericPercepts" as module.
+order=linearall.
+
+module ZergExtractor {
+	if true then insert(true).
+}
