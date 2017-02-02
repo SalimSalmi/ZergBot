@@ -24,8 +24,20 @@ module GenericPercepts {
 	forall percept(unitAmount(Type,Count)), not(bel(unitAmount(Type,Count))) do insert(unitAmount(Type,Count)).
 	forall bel(unitAmount(Type,Count)),not(percept(unitAmount(Type,Count))) do delete(unitAmount(Type,Count)).
 	
+	%forall percept(unitAmount(Type,Count),(Type == "Zerg Zergling");(Type == "Zerg Hydralisk")) do insert(unitAttack())
+	
+	if not(percept(unitAmount("Zerg Zergling",Count1))) then insert(unitAmount("Zerg Zergling",0)).
+	if not(percept(unitAmount("Zerg Hydralisk",Count1))) then insert(unitAmount("Zerg Hydralisk",0)).
+	
+	if bel(unitAmount("Zerg Zergling",Count1)),bel(unitAmount("Zerg Hydralisk",Count2), Count is Count1 + Count2),bel(unitAttack(CountOld),not(CountOld==Count)) then delete(unitAttack(CountOld))+insert(unitAttack(Count)).
+	if bel(unitAmount("Zerg Zergling",Count1)),bel(unitAmount("Zerg Hydralisk",Count2), Count is Count1 + Count2),not(bel(unitAttack(_))) then insert(unitAttack(Count)).
+	
 	% The handling of the status percept
-	if percept(status(_,_,_,_,X,Y)), not(bel(myPos(X,Y))) then insert(myPos(X,Y)).
-	if bel(myPos(X,Y)), not(percept(status(_,_,_,_,X,Y))) then delete(myPos(X,Y)).
+	if percept(status(_,_,_,_,X,Y)),bel(self(Id,_)),not(bel(myPos(Id,X,Y))) then insert(myPos(Id,X,Y)).
+	if bel(self(Id,_),myPos(Id,X,Y)), not(percept(status(_,_,_,_,X,Y))) then delete(myPos(Id,X,Y)).
+	
+	
+	
+	
 	
 }

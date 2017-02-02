@@ -3,9 +3,7 @@ use "../GenericMods/GenericPercepts" as module.
 
 module ZergDroneEvent {
 	%%%%%%%%%%%%%%% --------------------------------------- Messaging --------------------------------------- %%%%%%%%%%%%%%%
-	%%insert own postion
-	if percept(status(_,_,_,_,X,Y)), not(bel(myPos(X,Y))) then insert(myPos(X,Y)).
-	if bel(myPos(X,Y)), not(percept(status(_,_,_,_,X,Y))) then delete(myPos(X,Y)).
+	
 	
 	% Received builder task from the Overmind
 	if (Name).sent:(builder) then insert(builder).
@@ -17,17 +15,20 @@ module ZergDroneEvent {
 	if (_).sent:(hatcheryPosition(X, Y)) then insert(hatcheryPosition(X, Y)).
 	
 	% Drone positions
-	if bel(myPos(X,Y)) then allother.send(myPos(X,Y)).
-	forall (Name).sent(myPos(X,Y)), not(bel(otherPos(Name, X, Y))) do insert(otherPos(Name, X, Y)).
-	forall (Name).sent(myPos(X,Y)), bel(otherPos(Name, X2, Y2), not(X==X2), not(Y==Y2)) do delete(otherPos(Name, X2, Y2)).
+	if bel(myPos(Id,X,Y)) then allother.send(myPos(Id,X,Y)).
+	forall (Name).sent(myPos(Id,X,Y)), bel(otherPos(Name,Id,X2, Y2), X2\=X;Y2\=Y) do delete(otherPos(Name,Id,X2, Y2)).
+	forall (Name).sent(myPos(Id,X,Y)), not(bel(otherPos(Name,Id, X, Y))) do insert(otherPos(Name,Id,X, Y)).
 	
+	%%Check for building morph uniqueness
 	if (_).sent(morph(Building, _, _)), a-goal(morph(Building, X, Y)) then drop(morph(Building, X, Y)).
 	
-	if (_).sent(gasReady), goal(workerActivity(Id, gatheringGas)) then drop(workerActivity(Id, gatheringGas)) + adopt(workerActivity(Id, gatheringMinerals)). 
 	
 	%%%Getting message from Extractor
-	
 	if (_).sent(extractor(Id,X,Y)) then insert(extractor(Id,X,Y)).
+	
+	
+	%%Communication for gas collection
+	if (_).sent:(gasStarted(IdEx)),bel(self(Id,_),not(workerActivity(Id,gatheringGas))) then drop(gasGather(IdEx))+adopt(workerActivity(Id,gatheringMinerals)).
 	
 	%%%%%%%%%%%%%%% --------------------------------------- Percepts --------------------------------------- %%%%%%%%%%%%%%%
 	
@@ -61,33 +62,21 @@ module ZergDroneEvent {
 	% If the worker is not busy yet, start gathering minerals
 	if bel(not(busy), self(Id, _)) then adopt(workerActivity(Id, gatheringMinerals)).
 	
-	forall (_).sent:(unitAmount(Building,N)) do adopt(unitAmount(Building,N)).
+	forall (_).sent:(unitAmount(Building,N)) do adopt(unitAmount(Building,N)).	
 	
-	
-	
-	if a-goal(unitAmount("Zerg Spawning Pool", E)), bel(closestBuildLoc(X1, Y1),
-	 (unitAmount("Zerg Spawning Pool",ECurrent), E > ECurrent ; not(unitAmount("Zerg Spawning Pool", _))), myPos(X2,Y2),
+	if a-goal(unitAmount(Building, E)), bel(closestBuildLoc(X1, Y1),
+	 (unitAmount(Building,ECurrent), E > ECurrent ; not(unitAmount(Building, _))), myPos(_,X2,Y2),
 	 distance(X1,Y1,X2,Y2,D2), not(closestOther(X1,Y1, D2)))
-	 then allother.send:(morph("Zerg Spawning Pool", X1, Y1)) + adopt(morph("Zerg Spawning Pool", X1, Y1)).
-	 
-	if a-goal(unitAmount("Zerg Hydralisk Den", E)), bel(closestBuildLoc(X1, Y1),
-	 (unitAmount("Zerg Hydralisk Den",ECurrent), E > ECurrent ; not(unitAmount("Zerg Hydralisk Den", _))), myPos(X2,Y2),
-	 distance(X1,Y1,X2,Y2,D2), not(closestOther(X1,Y1, D2)))
-	 then allother.send:(morph("Zerg Hydralisk Den", X1, Y1)) + adopt(morph("Zerg Hydralisk Den", X1, Y1)). 
-	
+	 then allother.send:(morph(Building, X1, Y1)) + adopt(morph(Building, X1, Y1)).
+	 	
 	if a-goal(unitAmount("Zerg Extractor", E)), percept(vespeneGeyser(_,_,_,X1,Y1)), bel(hatcheryPosition(Xh, Yh), distance(X1,Y1,Xh,Yh,D), D<10,
-	 (unitAmount("Zerg Extractor",ECurrent), E > ECurrent ; not(unitAmount("Zerg Extractor", _))), myPos(X2,Y2),
+	 (unitAmount("Zerg Extractor",ECurrent), E > ECurrent ; not(unitAmount("Zerg Extractor", _))), myPos(_,X2,Y2),
 	 distance(X1,Y1,X2,Y2,D2), not(closestOther(X1,Y1, D2)))
 	 then adopt(morph("Zerg Extractor", X1, Y1)) + allother.send:(morph("Zerg Extractor", X1, Y1)).
 	 
 	 %%Changing to gas gathering
-	
-	if bel(self(Id,_),myPos(X2,Y2),distance(X,Y,X2,Y2,D), D < 10, shouldMineVespene) then drop(workerActivity(Id,gatheringMinerals))+adopt(workerActivity(Id, gatheringGas)).
-	
-	if goal(workerActivity(Id, gatheringGas)) then allother.send:(gasReady).
-	if not(bel(shouldMineVespene)), bel(self(Id,_)) then drop(workerActivity(Id, gatheringGas))+adopt(workerActivity(Id,gatheringMinerals)). 
-	
-	%if bel(extractor(IdEx,X,Y),self(Id,_),myPos(X2,Y2), distance(X,Y,X2,Y2,D), not(closestOther(X,Y,D))) then drop(workerActivity(Id,gatheringMinerals))+adopt(workerActivity(Id, gatheringGas)).
+	if not(goal(gasGather(_))), bel(not(workerActivity(_,gatheringGas)),extractor(IdEx,X,Y), myPos(Id,X1,Y1), distance(X,Y,X1,Y1,D1),not(closestOtherGas(X,Y,D1))) then adopt(gasGather(IdEx))+drop(workerActivity(Id,gatheringMinerals))+allother.send:(gasStarted(IdEx)).
+	if not(goal(gasGather(_))), bel(aggregate_all(count, workerActivity(_,gatheringGas), Count), Count == 1,extractor(IdEx,X,Y), myPos(Id,X1,Y1), distance(X,Y,X1,Y1,D1),not(closestOtherGas(X,Y,D1))) then adopt(gasGather(IdEx))+drop(workerActivity(Id,gatheringMinerals))+allother.send:(gasStarted(IdEx)).
 	
 	
 }

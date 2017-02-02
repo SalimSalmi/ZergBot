@@ -18,6 +18,8 @@ module ZergHatcheryEvent {
 	% The handling of the queueSize percept
 	if percept(queueSize(N)), bel(queueSize(No), No \= N) then delete(queueSize(No)) + insert(queueSize(N)).
 	
+	%%No of attacking units
+	
 
 	%%%%%%%%%%%%%%% --------------------------------------- GOALS ------------------------------------------- %%%%%%%%%%%%%%%
 
@@ -25,13 +27,29 @@ module ZergHatcheryEvent {
 	
 	if not(goal(unitAmount("Zerg Drone", 5))), not(bel(unitAmount("Zerg Spawning Pool", _))) then adopt(unitAmount("Zerg Drone", 5)).
 	if not(goal(unitAmount("Zerg Drone", 6))), bel(isMorphing("Zerg Spawning Pool", _); unitAmount("Zerg Spawning Pool", _)) then adopt(unitAmount("Zerg Drone", 6)).
-	
 	% If there is a Spawning Pool start making zerglings
-	if not(goal(unitAmount("Zerg Zergling", 20))), bel(friendly("Zerg Spawning Pool", _, _, _), unitAmount("Zerg Drone", N), N >= 6) then adopt(unitAmount("Zerg Zergling", 20)).	
+	%if not(goal(unitAmount("Zerg Zergling", 20))), bel(friendly("Zerg Spawning Pool", _, _, _), unitAmount("Zerg Drone", N), N >= 6) then adopt(unitAmount("Zerg Zergling", 20)).	
 
+	%%%
 	
+	
+	%if bel(friendly("Zerg Spawning Pool", _, _, _), unitAmount("Zerg Drone",Du), unitAttack(Au), Div is Au/Du, Div <= 1, Dnew is Du+1) then adopt(unitAmount("Zerg Zergling",Dnew)).
+	
+	if bel(friendly("Zerg Spawning Pool", _, _, _), unitAmount("Zerg Drone",Du), unitAttack(Au), Div is Au/Du, Div < 1, Dnew is Du+1) then adopt(unitAmount("Zerg Zergling",Dnew)).
+	
+	if bel(friendly("Zerg Hydralisk Den", _, _, _), unitAmount("Zerg Drone",Du), unitAttack(Au), Div is Au/Du, Div < 1, Dnew is Du+1) then drop(unitAmount("Zerg Zergling",Dnew))+adopt(unitAmount("Zerg Hydralisk",Dnew)).
+	
+	if bel(unitAmount("Zerg Drone",Du), unitAttack(Au), not(Au == 0), Div is Au/Du, Div >= 1, Dnew is Du+1) then adopt(unitAmount("Zerg Drone",Dnew)). 
+
+
+
 	if bel(supply(CS, TS), (TS == CS),isMorphing("Zerg Egg",_), (unitAmount("Zerg Extractor", Y), not(Y>0) ; not(unitAmount("Zerg Extractor", _)))) then allother.send:(unitAmount("Zerg Extractor",1)).
 	
-	if bel(unitAmount("Zerg Extractor", Y), Y == 1,(unitAmount("Zerg Hydralisk Den", Y), not(Y>0) ; not(unitAmount("Zerg Hydralisk Den", _))) ) then allother.send:(unitAmount("Zerg Hydralisk Den",1)).
+	if bel(unitAmount("Zerg Extractor", Y), Y == 1,isMorphing("Zerg Egg",_),(unitAmount("Zerg Hydralisk Den", Y), not(Y>0) ; not(unitAmount("Zerg Hydralisk Den", _))) ) then allother.send:(unitAmount("Zerg Hydralisk Den",1)).
 	
+	%if not(goal(unitAmount("Zerg Hydralisk", 10))),bel(friendly("Zerg Hydralisk Den", _, _, _)) then adopt(unitAmount("Zerg Hydralisk",10))+drop(unitAmount("Zerg Zergling",20)).
+
+	%if bel(unitAmount("Zerg Hydralisk Den", Y), Y==1) then allother.send:(unitAmount("Zerg Creep Colony",1)).
+	
+	%if bel(unitAmount("Zerg Creep Colony", Y), Y==1) then allother.send:(unitAmount("Zerg Lair",1)).
 }

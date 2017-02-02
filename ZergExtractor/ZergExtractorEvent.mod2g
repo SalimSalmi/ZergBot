@@ -2,7 +2,7 @@ use ZergExtractor as knowledge.
 use "../GenericMods/GenericPercepts" as module.
 
 module ZergExtractorEvent {
-	if percept(status(_,_,_,_,X,Y),self(Id,_,_,_,_)) then insert(myLoc(X,Y),self(Id,"Zerg Extractor")).
+	if percept(status(_,_,_,Conditions,X,Y),self(Id,_,_,_,_)) then insert(myLoc(X,Y),self(Id,"Zerg Extractor")).
 	
 	if bel(myLoc(X,Y),self(Id,_)) then allother.send(extractor(Id,X,Y)).
 }

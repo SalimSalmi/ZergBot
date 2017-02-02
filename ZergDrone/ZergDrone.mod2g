@@ -8,7 +8,8 @@ module ZergDrone {
 	
 	
 	%%gathering gas
-	if a-goal(workerActivity(Id, gatheringGas)), bel(extractor(GasId,X,Y), self(Id,_)) then gather(GasId).
+	%if a-goal(workerActivity(Id, gatheringGas)), bel(extractor(GasId,X,Y), self(Id,_)) then gather(GasId).
+	if goal(gasGather(IdEx)) then gather(IdEx).
 	
 	% If goal to have 1 Spawning Pool and have enough minerals, build ya Spawning Pool
 	%if a-goal(unitAmount("Zerg Spawning Pool", 1)), bel(constructionSite(X,Y), minerals(M), M >= 200) then build("Zerg Spawning Pool", X, Y).

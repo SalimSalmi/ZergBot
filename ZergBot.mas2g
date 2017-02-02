@@ -31,6 +31,13 @@ define zergExtractor as agent{
 	
 }
 
+define zergHydralisk as agent{
+	use ZergHydralisk.ZergHydraliskInit as init module.
+	use ZergHydralisk.ZergHydralisk as main module.
+	use ZergHydralisk.ZergHydraliskEvent as event module.
+	
+}
+
 
 
 define overMind as agent {
@@ -43,4 +50,5 @@ launchpolicy{
 	when type = zergZergling launch zergZergling.
 	when type = zergDrone launch zergDrone.
 	when type = zergExtractor launch zergExtractor.
-	}
+	when type = zergHydralisk launch zergHydralisk.
+}
