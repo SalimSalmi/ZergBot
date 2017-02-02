@@ -78,5 +78,5 @@ module ZergDroneEvent {
 	if not(goal(gasGather(_))), bel(not(workerActivity(_,gatheringGas)),extractor(IdEx,X,Y), myPos(Id,X1,Y1), distance(X,Y,X1,Y1,D1),not(closestOtherGas(X,Y,D1))) then adopt(gasGather(IdEx))+drop(workerActivity(Id,gatheringMinerals))+allother.send:(gasStarted(IdEx)).
 	if not(goal(gasGather(_))), bel(aggregate_all(count, workerActivity(_,gatheringGas), Count), Count == 1,extractor(IdEx,X,Y), myPos(Id,X1,Y1), distance(X,Y,X1,Y1,D1),not(closestOtherGas(X,Y,D1))) then adopt(gasGather(IdEx))+drop(workerActivity(Id,gatheringMinerals))+allother.send:(gasStarted(IdEx)).
 	
-	
+	if not(goal(gasGather(_))), bel(aggregate_all(count, workerActivity(_,gatheringGas), Count), Count == 2,extractor(IdEx,X,Y), myPos(Id,X1,Y1), distance(X,Y,X1,Y1,D1),not(closestOtherGas(X,Y,D1))) then adopt(gasGather(IdEx))+drop(workerActivity(Id,gatheringMinerals))+allother.send:(gasStarted(IdEx)).
 }
