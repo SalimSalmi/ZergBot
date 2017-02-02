@@ -37,7 +37,7 @@ module ZergHatcheryEvent {
 	
 	if bel(friendly("Zerg Spawning Pool", _, _, _), unitAmount("Zerg Drone",Du), unitAttack(Au), Div is Au/Du, Div < 1, Dnew is Du+1) then adopt(unitAmount("Zerg Zergling",Dnew)).
 	
-	if bel(friendly("Zerg Hydralisk Den", _, _, _), unitAmount("Zerg Drone",Du), unitAttack(Au), Div is Au/Du, Div < 1, Dnew is Du+1) then drop(unitAmount("Zerg Zergling",Dnew))+adopt(unitAmount("Zerg Hydralisk",Dnew)).
+	if bel(friendly("Zerg Hydralisk Den", _, _, _), unitAmount("Zerg Drone",Du), unitAttack(Au), Div is Au/Du, Div < 1, Dnew is Du+1) then adopt(unitAmount("Zerg Hydralisk",Dnew)).
 	
 	if bel(unitAmount("Zerg Drone",Du), unitAttack(Au), not(Au == 0), Div is Au/Du, Div >= 1, Dnew is Du+1) then adopt(unitAmount("Zerg Drone",Dnew)). 
 
@@ -49,7 +49,7 @@ module ZergHatcheryEvent {
 	
 	%if not(goal(unitAmount("Zerg Hydralisk", 10))),bel(friendly("Zerg Hydralisk Den", _, _, _)) then adopt(unitAmount("Zerg Hydralisk",10))+drop(unitAmount("Zerg Zergling",20)).
 
-	%if bel(unitAmount("Zerg Hydralisk Den", Y), Y==1) then allother.send:(unitAmount("Zerg Creep Colony",1)).
+	if bel(unitAmount("Zerg Hydralisk Den", Y), Y==1) then allother.send:(unitAmount("Zerg Creep Colony",1)).
 	
 	%if bel(unitAmount("Zerg Creep Colony", Y), Y==1) then allother.send:(unitAmount("Zerg Lair",1)).
 }
