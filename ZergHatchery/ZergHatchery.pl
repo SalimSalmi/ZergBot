@@ -19,6 +19,6 @@ unitAttack/1.
 	unitCost("Zerg Drone", 50, 0).
 	unitCost("Zerg Zergling", 50, 0).
 	unitCost("Zerg Overlord", 100, 0).
-	unitCost("Zerg Hydralisk",100,50).
+	unitCost("Zerg Hydralisk",75,25).
 	
 	
