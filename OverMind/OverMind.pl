@@ -4,6 +4,11 @@ drone/2,
 ready/1,
 hatcheryPosition/2,
 currentSupply/2,
-sendDrone/3.
+sendDrone/3,
+batch/3,
+unit/2.
 
-allReady :- aggregate_all(count, ready(_), Count), Count > 5.
+alive([],0).
+alive([Id|T],N) :- unit(_,Id), alive(T,N2), N is N2 + 1.
+alive([Id|T],N) :- not(unit(_,Id)), alive(T,N).
+

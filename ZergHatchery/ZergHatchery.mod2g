@@ -4,7 +4,7 @@ use ZergHatchery as actionspec.
 module ZergHatchery {
 	
 	%%%if supply is low then build overlords
-	%if bel(supply(CS, TS), (TS == CS) ,not(isMorphing("Zerg Egg",_)), unitCost("Zerg Overlord", CostM,CostG), minerals(M),gas(G),G>=CostG ,M >= CostM) then train("Zerg Overlord").
+	if bel(supply(CS, TS), (TS == CS) ,not(isMorphing("Zerg Egg",_)), unitCost("Zerg Overlord", CostM,CostG), minerals(M),gas(G),G>=CostG ,M >= CostM) then train("Zerg Overlord").
 			
 	%%%if bel(unitAmount("Zerg Zergling",Z1), mod(Z1,3)==0) then train("Zerg Drone").
 	

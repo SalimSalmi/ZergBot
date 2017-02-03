@@ -5,7 +5,7 @@ module ZergHatcheryEvent {
 	%%%%%%%%%%%%%%% --------------------------------------- Messaging --------------------------------------- %%%%%%%%%%%%%%%
 	
 	% If a friendly drone dies, let the OverMind know
-	forall bel(friendly("Zerg Drone",Id,_,_)) , not(percept(unit(true, "Zerg Drone",Id,_,_,_))) do (overMind).send:(death(Id)).
+	forall bel(friendly(Name,Id,_,_)) , not(percept(unit(true,Name,Id,_,_,_))) do (overMind).send:(death(Id)).
 		
 	%%%%%%%%%%%%%%% --------------------------------------- Percepts ---------------------------------------- %%%%%%%%%%%%%%%
 	
@@ -31,12 +31,12 @@ module ZergHatcheryEvent {
 	%if not(goal(unitAmount("Zerg Zergling", 20))), bel(friendly("Zerg Spawning Pool", _, _, _), unitAmount("Zerg Drone", N), N >= 6) then adopt(unitAmount("Zerg Zergling", 20)).	
 
 	%%%Controlling the no of overlords
-	if bel(supply(CS,TS),TS - CS < 3, unitAmount("Zerg Overlord",Z), Znew = Z+1) then adopt(unitAmount("Zerg Overlord",Znew)).
+	%if bel(supply(CS,TS),TS - CS < 3, unitAmount("Zerg Overlord",Z), Znew is Z+1) then adopt(unitAmount("Zerg Overlord",Znew)).
 	
-	if bel(friendly("Zerg Spawning Pool", _, _, _), unitAmount("Zerg Drone",Du), unitAttack(Au), Div is Au/Du, Div < 1, Dnew is Du+1) then adopt(unitAmount("Zerg Zergling",Dnew)).
+	if bel(friendly("Zerg Spawning Pool", _, _, _), unitAmount("Zerg Drone",Du), unitAttack(Au), Div is Au/Du, Div =< 2, unitAmount("Zerg Zergling", Dz), Dnew is Dz + 1) then adopt(unitAmount("Zerg Zergling",Dnew)).
 	
-	if bel(friendly("Zerg Hydralisk Den", _, _, _), unitAmount("Zerg Drone",Du), unitAttack(Au), Div is Au/Du, Div < 1, Dnew is Du+1) then adopt(unitAmount("Zerg Hydralisk",Dnew)).
+	if bel(friendly("Zerg Hydralisk Den", _, _, _), unitAmount("Zerg Drone",Du), unitAttack(Au), Div is Au/Du, Div =< 2, unitAmount("Zerg Hydralisk", Dh), Dnew is Dh+1) then adopt(unitAmount("Zerg Hydralisk",Dnew)).
 	
-	if bel(unitAmount("Zerg Drone",Du), unitAttack(Au), not(Au == 0), Div is Au/Du, Div >= 1, Dnew is Du+1) then adopt(unitAmount("Zerg Drone",Dnew)). 
+	if bel(unitAmount("Zerg Drone",Du), unitAttack(Au), not(Au == 0), Div is Au/Du, Div > 2, Dnew is Du+1) then adopt(unitAmount("Zerg Drone",Dnew)). 
 
 }

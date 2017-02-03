@@ -4,10 +4,6 @@ use "../GenericMods/GenericPercepts" as module.
 module ZergDroneEvent {
 	%%%%%%%%%%%%%%% --------------------------------------- Messaging --------------------------------------- %%%%%%%%%%%%%%%
 	
-	
-	% Received builder task from the Overmind
-	if (Name).sent:(builder) then insert(builder).
-	
 	% If don't know hatchery position yet, ask the overMind
 	if not(bel(hatcheryPosition(_, _))) then (overMind).send?(hatcheryPosition).
 	
@@ -60,9 +56,9 @@ module ZergDroneEvent {
 	% Construction of the buildings
 	if not(goal(unitAmount("Zerg Spawning Pool", 1))) then adopt(unitAmount("Zerg Spawning Pool", 1)).
 	
-	if bel(unitAmount("Zerg Spawning Pool", Y),unitAmount("Zerg Hatchery",1)) then adopt(unitAmount("Zerg Hatchery",2)).
+	%if bel(unitAmount("Zerg Spawning Pool", Y),unitAmount("Zerg Hatchery",1)) then adopt(unitAmount("Zerg Hatchery",2)).
 	
-	if bel(unitAmount("Zerg Hatchery",Z),Z > 1,not(unitAmount("Zerg Extractor", _))) then adopt(unitAmount("Zerg Extractor",1)).
+	if bel(unitAmount("Zerg Overlord",O),O >= 2,unitAmount("Zerg Hatchery",Z),Z > 1,not(unitAmount("Zerg Extractor", _))) then adopt(unitAmount("Zerg Extractor",1)).
 	
 	if bel(unitAmount("Zerg Extractor",1),not(unitAmount("Zerg Hydralisk Den", _))) then adopt(unitAmount("Zerg Hydralisk Den",1)).
 	
