@@ -13,4 +13,7 @@ module ZergHydraliskInit {
 		
 	% Init position and health
 	if percept(status(H,_,_,_,X,Y)) then insert(hitPoints(H), position(X,Y)).
+	
+	if percept(self(Id,Type,_,_,_)) then insert(self(Id, Type)) + (overMind).send:(unit(Id)).
+	
 }

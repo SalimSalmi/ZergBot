@@ -16,6 +16,6 @@ module ZergDroneInit {
 	% Init conditions
 	if percept(status(_,_,_,List,_,_)) then insert(condition(List)).
 	
-	% Send drone info to the Overmind
-	if percept(self(Id,Type,_,_,_)) then insert(self(Id, Type)) + (overMind).send:(drone(Id)).
+	% Send unit info to the Overmind
+	if percept(self(Id,Type,_,_,_)) then insert(self(Id, Type)) + (overMind).send:(unit(Id)).
 	}

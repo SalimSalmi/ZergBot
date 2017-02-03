@@ -3,5 +3,4 @@ use "../GenericMods/GenericPercepts" as module.
 
 module ZergSpawningPoolEvent {
 	if true then GenericPercepts.
-	
 }

@@ -54,32 +54,35 @@ module ZergDroneEvent {
 	forall goal(unitAmount(Unit,N), unitAmount(Unit,M), N > M) do drop(unitAmount(Unit,M)).
 	
 	% Construction of the buildings
+	% Adopt goal to build spawning pool if there is no pool yet.
 	if not(goal(unitAmount("Zerg Spawning Pool", 1))) then adopt(unitAmount("Zerg Spawning Pool", 1)).
-	
-	%if bel(unitAmount("Zerg Spawning Pool", Y),unitAmount("Zerg Hatchery",1)) then adopt(unitAmount("Zerg Hatchery",2)).
-	
+	% When there is a spawning pool adopt a goal of a new hatchery.
+	if bel(unitAmount("Zerg Spawning Pool", Y),unitAmount("Zerg Hatchery",1)) then adopt(unitAmount("Zerg Hatchery",2)).
+	% When there is a new hatchery and at least 2 overlords adopt goal to build an extractor.
 	if bel(unitAmount("Zerg Overlord",O),O >= 2,unitAmount("Zerg Hatchery",Z),Z > 1,not(unitAmount("Zerg Extractor", _))) then adopt(unitAmount("Zerg Extractor",1)).
-	
+	% If we have an extractor but no hydralisk den then adopt goal to build hydralisk den.
 	if bel(unitAmount("Zerg Extractor",1),not(unitAmount("Zerg Hydralisk Den", _))) then adopt(unitAmount("Zerg Hydralisk Den",1)).
+	% Every time we build up a buffer of resources then adopt goal of one more hatchery
+	if bel(minerals(M), M >= 700, unitAmount("Zerg Hatchery", Zh), Znew is Zh + 1) then adopt(unitAmount("Zerg Hatchery",Znew)).
+	
 	
 	% If the worker is not busy yet, start gathering minerals
 	if bel(not(busy), self(Id, _)) then adopt(workerActivity(Id, gatheringMinerals)).
 	
-	%forall (_).sent:(unitAmount(Building,N)) do adopt(unitAmount(Building,N)).	
-	
+	% Discuss amongst drones who builds the Extractor.
 	if a-goal(unitAmount("Zerg Extractor", E)), percept(vespeneGeyser(_,_,_,X1,Y1)), bel(hatcheryPosition(Xh, Yh), distance(X1,Y1,Xh,Yh,D), D<10,
 	 (unitAmount("Zerg Extractor",ECurrent), E > ECurrent ; not(unitAmount("Zerg Extractor", _))), myPos(_,X2,Y2),
 	 distance(X1,Y1,X2,Y2,D2), not(closestOther(X1,Y1, D2)))
 	 then adopt(morph("Zerg Extractor", X1, Y1)) + allother.send:(morph("Zerg Extractor", X1, Y1)).
 	
+	% Discuss amongst drones who builds the building.
 	if a-goal(unitAmount(Building, E)), bel(closestBuildLoc(X1, Y1),
 	 (unitAmount(Building,ECurrent), E > ECurrent ; not(unitAmount(Building, _))), myPos(_,X2,Y2),
 	 distance(X1,Y1,X2,Y2,D2), not(closestOther(X1,Y1, D2)))
 	 then allother.send:(morph(Building, X1, Y1)) + adopt(morph(Building, X1, Y1)).
 	
-	 %%Changing to gas gathering
+	% Gas gathering goals
 	if not(goal(gasGather(_))), bel(not(workerActivity(_,gatheringGas)),extractor(IdEx,X,Y), myPos(Id,X1,Y1), distance(X,Y,X1,Y1,D1),not(closestOtherGas(X,Y,D1))) then adopt(gasGather(IdEx))+drop(workerActivity(Id,gatheringMinerals))+allother.send:(gasStarted(IdEx)).
 	if not(goal(gasGather(_))), bel(aggregate_all(count, workerActivity(_,gatheringGas), Count), Count == 1,extractor(IdEx,X,Y), myPos(Id,X1,Y1), distance(X,Y,X1,Y1,D1),not(closestOtherGas(X,Y,D1))) then adopt(gasGather(IdEx))+drop(workerActivity(Id,gatheringMinerals))+allother.send:(gasStarted(IdEx)).
-	
-	%if not(goal(gasGather(_))), bel(aggregate_all(count, workerActivity(_,gatheringGas), Count), Count == 2,extractor(IdEx,X,Y), myPos(Id,X1,Y1), distance(X,Y,X1,Y1,D1),not(closestOtherGas(X,Y,D1))) then adopt(gasGather(IdEx))+drop(workerActivity(Id,gatheringMinerals))+allother.send:(gasStarted(IdEx)).
+	if not(goal(gasGather(_))), bel(aggregate_all(count, workerActivity(_,gatheringGas), Count), Count == 2,extractor(IdEx,X,Y), myPos(Id,X1,Y1), distance(X,Y,X1,Y1,D1),not(closestOtherGas(X,Y,D1))) then adopt(gasGather(IdEx))+drop(workerActivity(Id,gatheringMinerals))+allother.send:(gasStarted(IdEx)).
 }

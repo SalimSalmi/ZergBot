@@ -35,24 +35,15 @@ gasGather/1.
 	cost("Zerg Lair",150,100).
 	
 	
-	% default distance check				
+	% Default distance check				
 	distance(X1,Y1,X2,Y2,D) :- D is sqrt((X2-X1)**2 + (Y2-Y1)**2).
 	
+	% Closest drone to ourself
 	closestOther(X1,Y1, D) :- otherPos(_,Id,X2,Y2),distance(X1,Y1, X2, Y2,D2), D > D2.
 	
 	closestOtherGas(X1,Y1, D) :- otherPos(_,Id,X2,Y2), workerActivity(Id,gatheringMinerals),distance(X1,Y1, X2, Y2,D2), D > D2.
 	
-	%closestBuildLoc(X, Y) :- hatcheryPosition(Xh, Yh), constructionSite(X, Y), distance(X, Y, Xh, Yh, D),
-	%			constructionSite(X2, Y2), not(X==X2), not(Y==Y2), distance(X2, Y2, Xh, Yh, D2), not(D > D2).
-	
-	
 	closestBuildLoc(X,Y) :- hatcheryPosition(Xh, Yh), constructionSite(X, Y), distance(X, Y, Xh, Yh, D), not(otherdistances(D)).
 	
 	otherdistances(D) :- constructionSite(X2, Y2), hatcheryPosition(Xh, Yh), distance(X2,Y2, Xh, Yh,D2), D>D2. 
-				
-	% example code for gas gathering handling
-	shouldMineVespene :- unitAmount("Zerg Extractor",RefCount),
-			     NeededWorkers is RefCount * 2,
-			     aggregate_all(count, workerActivity(_,gatheringGas), Count),
-			     Count < NeededWorkers.
-									
+						

@@ -4,7 +4,7 @@ use "StarCraft connector.jar" as environment with
 	starcraft_location="C:\\Starcraft",
 	debug="true",
 	auto_menu="Single_Player",
-	enemy_race="protoss".
+	enemy_race="terran".
 	
 	
 define zergDrone as agent {
@@ -31,17 +31,16 @@ define zergExtractor as agent{
 	
 }
 
-define zergHydralisk as agent{
-	use ZergHydralisk.ZergHydraliskInit as init module.
-	use ZergHydralisk.ZergHydralisk as main module.
-	use ZergHydralisk.ZergHydraliskEvent as event module.	
-}
+%define zergHydralisk as agent{
+%	use ZergHydralisk.ZergHydraliskInit as init module.
+%	use ZergHydralisk.ZergHydralisk as main module.
+%	use ZergHydralisk.ZergHydraliskEvent as event module.	
+%}
 
 define zergSpawningPool as agent{
 	use ZergSpawningPool.ZergSpawningPool as main module.
 	use ZergSpawningPool.ZergSpawningPoolEvent as event module.	
 }
-
 
 
 define overMind as agent {
@@ -54,6 +53,6 @@ launchpolicy{
 	when type = zergZergling launch zergZergling.
 	when type = zergDrone launch zergDrone.
 	when type = zergExtractor launch zergExtractor.
-	when type = zergHydralisk launch zergHydralisk.
+	when type = zergHydralisk launch zergZergling.
 	when type = zergSpawningPool launch zergSpawningPool.
 }

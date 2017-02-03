@@ -22,3 +22,7 @@ hatcheryPosition/2.
 
 % default distance check
 distance(X1,Y1,X2,Y2,D) :- D is sqrt((X2-X1)**2 + (Y2-Y1)**2).	 
+
+closestChokeLoc(X,Y) :- hatcheryPosition(Xh, Yh), chokePoint(X, Y), distance(X, Y, Xh, Yh, D), not(otherdistances(D)).
+	
+otherdistances(D) :- chokePoint(X2, Y2), hatcheryPosition(Xh, Yh), distance(X2,Y2, Xh, Yh,D2), D>D2. 

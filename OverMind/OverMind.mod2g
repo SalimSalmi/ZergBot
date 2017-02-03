@@ -4,24 +4,27 @@ order=linearall.
 module OverMindEvent {
 	%%%%%%%%%%%%%%% --------------------------------------- Messaging --------------------------------------- %%%%%%%%%%%%%%%
 	
-	% If enough zerglings gathered, tell zerglings to attack
+	% If enough zerglings gathered, tell attacking units to attack
 	forall bel(batch(holding,List,X), alive(List,N), N >= X) do allother.send(attack(List))+delete(batch(holding,List,X))
 	+insert(batch(attacking,List,X)).
 	
+	% Keep sending attack command to attacking batch to notify new recruits
 	if bel(batch(attacking,List,_)) then allother.send(attack(List)).
 	
 	% If a unit has died, delete him from knowledge base
 	forall (_).sent:(death(Id)), bel(unit(Name, Id)) do delete(unit(Name, Id)).
 	
 	% If unit info received, insert it in knowledge base
-	forall (Name).sent(drone(Id)) do insert(unit(Name, Id)).
+	forall (Name).sent(unit(Id)) do insert(unit(Name, Id)).
 	
 	% If zergling is ready, insert it in knowledge base
 	forall (_).sent:(ready(Id)) do insert(ready(Id)).
 	
+	% Default batch
 	if bel(not(batch(_,_,_))) then insert(batch(holding,[],6)).
 	
-	if bel(batch(attacking,List,X), not(batch(holding,_,_)), alive(List, N), N < 0.5*X, NX is 2 * X) then insert(batch(holding,[],NX))
+	% If the attacking batch is doomed then make a new holding batch and delete the old batch
+	if bel(batch(attacking,List,X), not(batch(holding,_,_)), alive(List, N), N < 0.7*X, NX is 2 * X) then insert(batch(holding,[],NX))
 	+delete(batch(attacking,List,X)).
 	
 	if bel(ready(Id), % if ready
@@ -31,26 +34,10 @@ module OverMindEvent {
 		)
 		then delete(batch(Status,List,X)) + insert(batch(Status,NewList,X)).	
 	
-	%forall bel(ready(Id), % if ready
-	%	batch(_,List,_), not(member(Id,List)), % if not in any list
-	%	not(batch(holding,_,_)), % if there is no holding batch
-	%	batch(attacking,List,X) % if there is an attacking batch
-	%	)
-	%	do delete(batch(attacking,List,X)) + insert(batch(attacking,[Id|List],X)).	
-	
+
 	% When hatcheryPosition received, insert it to knowledge base
 	if (_).sent:(hatcheryPosition(X, Y)) then insert(hatcheryPosition(X, Y)).
 	
-	% If believe done, but the corresponding drone does not exist anymore, delete done from knowledge base
-	%if bel(done(Name, Id), not(unit(Name, Id))) then delete(done(Name, Id)).
-	
-	% If not believing done yet and have info about drone, insert in knowledge base and tell the drone he is the builder 
-	%if bel(not(done(Name, Id)), drone(Name, Id)) then insert(done(Name, Id)) + (Name).send(builder).
-	
 	% If hatchery position is requested, send the nexus location
 	forall (Name).sent?(hatcheryPosition), bel(hatcheryPosition(X, Y)) do (Name).send:(hatcheryPosition(X, Y)).
-	
-	%if (_).sent:(sendDrone(Building,X1,Y1)) then insert(sendDrone(Building,X1,Y1)).
-	
-	%forall bel(sendDrone(Building,X1,Y1), drone(Name,Id)) do (Name).send(sendDrone(Building,X1,Y1)).
 }
