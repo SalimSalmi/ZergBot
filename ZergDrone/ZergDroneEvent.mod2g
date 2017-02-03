@@ -55,25 +55,32 @@ module ZergDroneEvent {
 	forall bel(workerActivity(ID,ACT)),not(percept(workerActivity(ID,ACT))) do delete(workerActivity(ID,ACT)).
 		
 	%%%%%%%%%%%%%%% --------------------------------------- GOALS --------------------------------------- %%%%%%%%%%%%%%%
+	forall goal(unitAmount(Unit,N), unitAmount(Unit,M), N > M) do drop(unitAmount(Unit,M)).
 	
-	% If there is no spawningpool yet, create one
+	% Construction of the buildings
 	if not(goal(unitAmount("Zerg Spawning Pool", 1))) then adopt(unitAmount("Zerg Spawning Pool", 1)).
+	
+	if bel(unitAmount("Zerg Spawning Pool", Y),unitAmount("Zerg Hatchery",1)) then adopt(unitAmount("Zerg Hatchery",2)).
+	
+	if bel(unitAmount("Zerg Hatchery",Z),Z > 1,not(unitAmount("Zerg Extractor", _))) then adopt(unitAmount("Zerg Extractor",1)).
+	
+	if bel(unitAmount("Zerg Extractor",1),not(unitAmount("Zerg Hydralisk Den", _))) then adopt(unitAmount("Zerg Hydralisk Den",1)).
 	
 	% If the worker is not busy yet, start gathering minerals
 	if bel(not(busy), self(Id, _)) then adopt(workerActivity(Id, gatheringMinerals)).
 	
-	forall (_).sent:(unitAmount(Building,N)) do adopt(unitAmount(Building,N)).	
+	%forall (_).sent:(unitAmount(Building,N)) do adopt(unitAmount(Building,N)).	
+	
+	if a-goal(unitAmount("Zerg Extractor", E)), percept(vespeneGeyser(_,_,_,X1,Y1)), bel(hatcheryPosition(Xh, Yh), distance(X1,Y1,Xh,Yh,D), D<10,
+	 (unitAmount("Zerg Extractor",ECurrent), E > ECurrent ; not(unitAmount("Zerg Extractor", _))), myPos(_,X2,Y2),
+	 distance(X1,Y1,X2,Y2,D2), not(closestOther(X1,Y1, D2)))
+	 then adopt(morph("Zerg Extractor", X1, Y1)) + allother.send:(morph("Zerg Extractor", X1, Y1)).
 	
 	if a-goal(unitAmount(Building, E)), bel(closestBuildLoc(X1, Y1),
 	 (unitAmount(Building,ECurrent), E > ECurrent ; not(unitAmount(Building, _))), myPos(_,X2,Y2),
 	 distance(X1,Y1,X2,Y2,D2), not(closestOther(X1,Y1, D2)))
 	 then allother.send:(morph(Building, X1, Y1)) + adopt(morph(Building, X1, Y1)).
-	 	
-	if a-goal(unitAmount("Zerg Extractor", E)), percept(vespeneGeyser(_,_,_,X1,Y1)), bel(hatcheryPosition(Xh, Yh), distance(X1,Y1,Xh,Yh,D), D<10,
-	 (unitAmount("Zerg Extractor",ECurrent), E > ECurrent ; not(unitAmount("Zerg Extractor", _))), myPos(_,X2,Y2),
-	 distance(X1,Y1,X2,Y2,D2), not(closestOther(X1,Y1, D2)))
-	 then adopt(morph("Zerg Extractor", X1, Y1)) + allother.send:(morph("Zerg Extractor", X1, Y1)).
-	 
+	
 	 %%Changing to gas gathering
 	if not(goal(gasGather(_))), bel(not(workerActivity(_,gatheringGas)),extractor(IdEx,X,Y), myPos(Id,X1,Y1), distance(X,Y,X1,Y1,D1),not(closestOtherGas(X,Y,D1))) then adopt(gasGather(IdEx))+drop(workerActivity(Id,gatheringMinerals))+allother.send:(gasStarted(IdEx)).
 	if not(goal(gasGather(_))), bel(aggregate_all(count, workerActivity(_,gatheringGas), Count), Count == 1,extractor(IdEx,X,Y), myPos(Id,X1,Y1), distance(X,Y,X1,Y1,D1),not(closestOtherGas(X,Y,D1))) then adopt(gasGather(IdEx))+drop(workerActivity(Id,gatheringMinerals))+allother.send:(gasStarted(IdEx)).

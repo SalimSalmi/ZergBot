@@ -1,0 +1,8 @@
+use ZergSpawningPool as knowledge.
+
+% The train action
+define upgrade(U) with
+	pre {true}
+	post {true}
+
+		

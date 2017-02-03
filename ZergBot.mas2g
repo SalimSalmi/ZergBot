@@ -34,8 +34,12 @@ define zergExtractor as agent{
 define zergHydralisk as agent{
 	use ZergHydralisk.ZergHydraliskInit as init module.
 	use ZergHydralisk.ZergHydralisk as main module.
-	use ZergHydralisk.ZergHydraliskEvent as event module.
-	
+	use ZergHydralisk.ZergHydraliskEvent as event module.	
+}
+
+define zergSpawningPool as agent{
+	use ZergSpawningPool.ZergSpawningPool as main module.
+	use ZergSpawningPool.ZergSpawningPoolEvent as event module.	
 }
 
 
@@ -51,4 +55,5 @@ launchpolicy{
 	when type = zergDrone launch zergDrone.
 	when type = zergExtractor launch zergExtractor.
 	when type = zergHydralisk launch zergHydralisk.
+	when type = zergSpawningPool launch zergSpawningPool.
 }

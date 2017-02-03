@@ -1,5 +1,5 @@
 use ZergHatchery as knowledge.
-use Zerghatchery as actionspec.
+use ZergHatchery as actionspec.
 
 module ZergHatchery {
 	

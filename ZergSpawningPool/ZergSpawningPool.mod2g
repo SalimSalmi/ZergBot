@@ -1,0 +1,8 @@
+use ZergSpawningPool as knowledge.
+use "../GenericMods/GenericPercepts" as module.
+use ZergSpawningPool as actionspec.
+order=linearall.
+
+module ZergSpawningPool {
+	if bel(costUpgrade("Metabolic Boost",Min,Gas), gas(G), minerals(M), M >= Min, G>=Gas) then upgrade("Metabolic Boost").
+}
